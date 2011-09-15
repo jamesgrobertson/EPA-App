@@ -18,6 +18,7 @@
 		<div id="wrapper">
 			<header>
 				<h1>How is the Water?</h1>
+				<h2>Results</h2>
 			</header>
 			<div id="main">
 				<?php
@@ -47,31 +48,47 @@
 			$results = $client -> call('getEntitiesByLatLong', $params);
 			$error = $client -> getError();
 			$entities = $results['watersApplications']['array'][0]['watersEntities']['array'];
-			krumo($entities);
+
+
 
 				?>
 				<?php
-				foreach ($entities as $key => $entity) {
-					print '<div>' . $entity['entityName'] . '</div>';
-					print '<div>' . $entity['entityTypeDescription'] . '</div>';
-					print '<div>' . $entity['watersHightlights']['array'][2]['highlightValue'] . '</div>';
-					print '<div>' . $entity['watersUrls']['array'][0]['urlAddress'] . '</div>';
-					print '<div>' . $entity['endDateDescription'] . '</div>';
+				if (is_array($entities)) {
+					foreach ($entities as $key => $entity) {
+						print '<div class="box">';
+						print '<div class="name"><strong>Name:</strong> ' . $entity['entityName'] . '</div>';
+						print '<div class="type"><strong>Status:</strong> ' . $entity['entityTypeDescription'] . '</div>';
+						print '<div class="tmdl"><strong>Has a TMDL been developed?:</strong> ' . $entity['watersHightlights']['array'][2]['highlightValue'] . '</div>';
+						print '<div class="data"><strong>Last Data Available:</strong> ' . $entity['endDateDescription'] . '</div>';
+						print '<div class="report"><a href="' . $entity['watersUrls']['array'][0]['urlAddress'] . '">Read the Full Report</a></div>';
+						print '</div>';
+					}
+				} else { print '<p>There were no results found within that radius.</p>';
 				}
 				if ($error) { print $error;
 				};
-				} else {print 'You must enter a radius.';
+				} else {print '<p>You must enter a radius.</p>';
 				}
 				?>
+				<div class="box">
+					<p>
+						<a href="index.html">Do Another Search ></a>
+					</p>
+					<p>
+						<a href="more-information.html">Learn what the terms mean ></a>
+					</p>
+				</div>
+				<footer id="footer">
+					<p>
+						Created by <a href="http://www.jamesgrobertson.com">James Robertson</a> and Vanessa Dennis.
+					</p>
+					<p>
+						Submitted as an entry for the EPA's <a href="http://appsfortheenvironment.challenge.gov/">Apps for the Environment Challenge</a>.
+					</p>
+					<p>
+						Code licensed under the GPL and hosted on <a href="https://github.com/jamesgrobertson">github</a>.
+					</p>
+				</footer>
 			</div>
-			<footer>
-				<p>
-					&copy; Copyright  by James Robertson
-				</p>
-				<p>
-					Submitted as an entry for the EPA's Apps for the Environment Challenge.
-				</p>
-			</footer>
-		</div>
 	</body>
 </html>
